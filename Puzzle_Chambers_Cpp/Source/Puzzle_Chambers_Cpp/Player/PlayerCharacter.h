@@ -29,7 +29,30 @@ public:
 protected:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* Camera;
-	
+
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
+	void Turn(float InputValue);
+	void LookUp(float Value);
+	
+	float BaseTurnRate = 45.0f;
+	float BaseLookUpRate = 45.0f;
+
+private:
+	//Physics Handle 컴포넌트
+	UPROPERTY(VisibleAnywhere)
+	class UPhysicsHandleComponent* PhysicsHandle;
+
+	//물체 잡기 상태 확인
+	bool bIsGrabbingObject = false;
+
+	//물체 잡기 및 놓기 함수
+	void Grab();
+	void Release();
+
+	//플레이어가 보는 방향으로 라인 트레이스하여 물체 감지
+	FHitResult GetFirstPhysicsBodyInReach() const;
+
+	//물체 잡고 있는 동안 물체의 위치 업데이트
+	void UpdateGrabbedObjectLocation();
 };
