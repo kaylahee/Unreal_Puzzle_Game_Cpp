@@ -1,8 +1,11 @@
 #include "Puzzle_Chambers_Cpp/Player/PlayerCharacter.h"
+#include "Puzzle_Chambers_Cpp/Object/FlashLight.h"
 #include "Camera/CameraComponent.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Components/InputComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Engine.h"
+#include "RunTime/Engine/Classes/Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerCharacter::APlayerCharacter()
@@ -16,6 +19,10 @@ APlayerCharacter::APlayerCharacter()
 
 	// Physics Handle 컴포넌트 초기화
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
+
+	FlashlightAttachTransform.SetLocation(FVector(0.0f, 0.0f, 50.0f)); // 예시 위치
+	FlashlightAttachTransform.SetRotation(FQuat::Identity);
+	FlashlightAttachTransform.SetScale3D(FVector(1.0f));
 }
 
 // Called when the game starts or when spawned
@@ -28,6 +35,8 @@ void APlayerCharacter::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("Physics Handle is missing on %s!"), *GetOwner()->GetName());
 	}
+
+	FlashLight = Cast<AFlashLight>(UGameplayStatics::GetActorOfClass(GetWorld(), AFlashLight::StaticClass()));
 }
 
 // Called every frame
@@ -54,6 +63,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
+
+	PlayerInputComponent->BindAction("AttachFlashLight", IE_Pressed, this, &APlayerCharacter::AttachFlashLight);
+	PlayerInputComponent->BindAction("ToggleLight", IE_Pressed, this, &APlayerCharacter::ToggleLight);
 }
 
 void APlayerCharacter::MoveForward(float InputValue)
@@ -149,4 +161,39 @@ void APlayerCharacter::UpdateGrabbedObjectLocation()
 
 	FVector TargetLocation = PlayerViewPointLocation + (PlayerViewPointRotation.Vector() * 300.0f);
 	PhysicsHandle->SetTargetLocation(TargetLocation);
+}
+
+void APlayerCharacter::AttachFlashLight()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q pressed")));
+	if (bHasFlashLight) {
+		bHasFlashLight = false;
+	}
+	else {
+		bHasFlashLight = true;
+	}
+
+	if (bHasFlashLight && FlashLight->bcanAttach)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q in")));
+		/*FlashLight->Destroy();
+		FlashLight = nullptr;*/
+	}
+}
+
+void APlayerCharacter::ToggleLight()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. R pressed")));
+	if (bIsLightTurnOn) {
+		bIsLightTurnOn = false;
+	}
+	else {
+		bIsLightTurnOn = true;
+	}
+
+	if (bIsLightTurnOn && bHasFlashLight && FlashLight->bcanAttach)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. R in")));
+		//FlashLight->ToggleLight();
+	}
 }

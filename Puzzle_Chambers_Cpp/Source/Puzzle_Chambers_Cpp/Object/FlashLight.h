@@ -5,7 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/SpotLightComponent.h"
+#include "Components/SphereComponent.h"
 #include "FlashLight.generated.h"
+
+class APlayerCharacter;
 
 UCLASS()
 class PUZZLE_CHAMBERS_CPP_API AFlashLight : public AActor
@@ -19,18 +22,28 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void AttachFlashLight();
-	void DetachFlashLight();
+	void Attach();
+	void TurnOn();
 
-	void ToggleLight();
-
-	bool bIsAttached;
+	bool bcanAttach;
 	bool bIsLightOn;
 
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* Body;
+
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* TriggerSphere;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light")
+	USpotLightComponent* FlashLight_Light;
+
+	/*UPROPERTY(EditAnywhere)
+	APlayerCharacter* PlayerActor;*/
 };

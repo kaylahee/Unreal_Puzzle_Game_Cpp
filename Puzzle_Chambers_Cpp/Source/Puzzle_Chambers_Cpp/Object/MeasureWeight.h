@@ -4,9 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WeightDisplay.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "MeasureWeight.generated.h"
 
 class AWeight;
@@ -34,6 +34,9 @@ public:
 
 	float GetTotalWeight() { return TotalWeight; }
 
+	UPROPERTY(VisibleAnywhere)
+	UTextRenderComponent* TextRenderer;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* TriggerBox;
@@ -42,9 +45,4 @@ private:
 	UStaticMeshComponent* Cylinder;
 
 	float TotalWeight;
-
-	UPROPERTY(EditAnywhere)
-	AWeightDisplay* WeightDisplay;
-
-	void UpdateWeightDisplay();
 };

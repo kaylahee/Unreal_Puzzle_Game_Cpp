@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+class AFlashLight;
+
 UCLASS()
 class PUZZLE_CHAMBERS_CPP_API APlayerCharacter : public ACharacter
 {
@@ -26,6 +28,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light")
+	FTransform FlashlightAttachTransform;
+
+	UPROPERTY(EditAnywhere)
+	AFlashLight* FlashLight;
+
+	void AttachFlashLight();
+	void ToggleLight();
+
 protected:
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* Camera;
@@ -34,9 +45,13 @@ protected:
 	void MoveRight(float InputValue);
 	void Turn(float InputValue);
 	void LookUp(float Value);
-	
+
 	float BaseTurnRate = 45.0f;
 	float BaseLookUpRate = 45.0f;
+
+	bool bCanGetLight;
+	bool bHasFlashLight;
+	bool bIsLightTurnOn;
 
 private:
 	//Physics Handle ÄÄÆ÷³ÍÆ®
