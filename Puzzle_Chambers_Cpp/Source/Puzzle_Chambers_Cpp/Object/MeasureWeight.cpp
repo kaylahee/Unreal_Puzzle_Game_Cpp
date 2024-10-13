@@ -4,27 +4,22 @@
 #include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Puzzle_Chambers_Cpp/Object/Weight.h"
+#include "Engine.h"
 
 // Sets default values
 AMeasureWeight::AMeasureWeight()
 {
     PrimaryActorTick.bCanEverTick = true;
 
-    // TriggerBox 초기화
-    TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
-
     // Cylinder 초기화
     Cylinder = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cylinder"));
-
-    // 실린더 메시 설정 (기본 제공 메시 사용)
-    //static ConstructorHelpers::FObjectFinder<UStaticMesh> CylinderMesh(TEXT("/Game/StarterContent/Shapes/Shape_Cylinder")); // Unreal Engine 기본 실린더 메시 경로
+    RootComponent = Cylinder;
+    
+    // TriggerBox 초기화
+    TriggerBox = CreateDefaultSubobject<UBoxComponent>(TEXT("TriggerBox"));
+    TriggerBox->SetupAttachment(RootComponent);
 
     TotalWeight = 0.0f;
-
-    // 충돌 설정
-    TriggerBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-    TriggerBox->SetCollisionResponseToAllChannels(ECR_Ignore);
-    TriggerBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +41,7 @@ void AMeasureWeight::NotifyActorBeginOverlap(AActor* OtherActor)
     {
         // 무게 합산
         TotalWeight += WeightActor->GetWeight();
+        /*GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%.2f"), TotalWeight));*/
         UpdateWeightDisplay();
     }
 }
@@ -60,10 +56,7 @@ void AMeasureWeight::NotifyActorEndOverlap(AActor* OtherActor)
     }
 }
 
-void AMeasureWeight::UpdateWeightDisplay() const
+void AMeasureWeight::UpdateWeightDisplay()
 {
-    if (WeightDisplay)
-    {
-        WeightDisplay->UpdateWeight(TotalWeight);
-    }
+    WeightDisplay->UpdateWeight(TotalWeight);
 }

@@ -16,14 +16,15 @@ class PUZZLE_CHAMBERS_CPP_API AWeightDisplay : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWeightDisplay();
-
 	void UpdateWeight(float TotalWeight);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
 	UPROPERTY(VisibleAnywhere)
 	UTextRenderComponent* TextRenderer;
+
+private:
+	
 };

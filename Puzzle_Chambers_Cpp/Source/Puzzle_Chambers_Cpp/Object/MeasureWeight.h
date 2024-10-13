@@ -32,6 +32,8 @@ public:
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
 
+	float GetTotalWeight() { return TotalWeight; }
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* TriggerBox;
@@ -44,5 +46,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	AWeightDisplay* WeightDisplay;
 
-	void UpdateWeightDisplay() const;
+	void UpdateWeightDisplay();
 };
