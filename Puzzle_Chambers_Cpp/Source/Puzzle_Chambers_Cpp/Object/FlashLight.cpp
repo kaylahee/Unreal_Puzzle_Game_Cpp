@@ -3,11 +3,14 @@
 
 #include "Puzzle_Chambers_Cpp/Object/FlashLight.h"
 #include "Puzzle_Chambers_Cpp/Player/PlayerCharacter.h"
+#include "Puzzle_Chambers_Cpp/Object/Alphabet.h"
 #include "GameFramework/Actor.h"
 #include "Components/SpotLightComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/SphereComponent.h"
 #include "Engine.h"
+#include "RunTime/Engine/Classes/Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AFlashLight::AFlashLight()
@@ -24,7 +27,13 @@ AFlashLight::AFlashLight()
 	FlashLight_Light = CreateDefaultSubobject<USpotLightComponent>(TEXT("Light"));
 	FlashLight_Light->SetupAttachment(RootComponent);
 
-	FlashLight_Light->SetVisibility(false);
+	SphereComponent = CreateDefaultSubobject<USphereComponent>(TEXT("TriggerLight"));
+	SphereComponent->SetupAttachment(FlashLight_Light);
+
+	FVector OriginalPos = FVector(715.0f, 710.0f, 160.0f);
+	FRotator OriginalRot = FRotator(-90.0f, 0.0f, 0.0f);
+	FVector OriginalScale = FVector(0.5f, 0.5f, 0.7f);
+	OriginalTransform = FTransform(OriginalRot, OriginalPos, OriginalScale);
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +41,8 @@ void AFlashLight::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	PlayerActor = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
+	FlashLight_Light->SetVisibility(false);
 }
 
 // Called every frame
@@ -39,36 +50,102 @@ void AFlashLight::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bIsAttached)
+	{
+		FVector NewPos = PlayerActor->AttachPoint->GetComponentLocation();
+		FRotator NewRot = PlayerActor->AttachPoint->GetComponentRotation();
+		FVector NewScale = FVector(0.5f, 0.5f, 0.7f);
+		FTransform NewTransform(NewRot, NewPos, NewScale);
+
+		this->SetActorTransform(NewTransform);
+	}
 }
 
 //플레이어가 triggersphere 안으로 들어왔을때 장착할 수 있도록
 void AFlashLight::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	if (APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(OtherActor))
+	if (APlayerCharacter* P = Cast<APlayerCharacter>(OtherActor))
 	{
 		bcanAttach = true;
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player In"));
+	}
+
+	if (AAlphabet* alphabet = Cast<AAlphabet>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
+		alphabet->ShowText();
 	}
 }
 
 //플레이어가 triggersphere 밖에서는 장착 불가
 void AFlashLight::NotifyActorEndOverlap(AActor* OtherActor)
 {
-	if (APlayerCharacter* PlayerActor = Cast<APlayerCharacter>(OtherActor))
+	if (APlayerCharacter* P = Cast<APlayerCharacter>(OtherActor))
 	{
 		bcanAttach = false;
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player Out"));
+	}
+
+	if (AAlphabet* alphabet = Cast<AAlphabet>(OtherActor))
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
+		alphabet->HideText();
 	}
 }
 
 void AFlashLight::Attach()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. E pressed")));
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Attached")));
+	bIsAttached = true;
+}
+
+void AFlashLight::Detach()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Detached")));
+	bIsAttached = false;
+	this->SetActorTransform(OriginalTransform);
 }
 
 void AFlashLight::TurnOn()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. R pressed")));
-	
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOn")));
+	FlashLight_Light->SetVisibility(true);
+
+	//ShowAlphabet();
+}
+
+void AFlashLight::TurnOff()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOff")));
+	FlashLight_Light->SetVisibility(false);
+
+	//HideAlphabet();
+}
+
+//void AFlashLight::ShowAlphabet()
+//{
+//	AAlphabet* alphabet = Cast<AAlphabet>(Actor);
+//	if (alphabet)
+//	{
+//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
+//		alphabet->ShowText();
+//	}
+//}
+
+void AFlashLight::HideAlphabet()
+{
+	//// 손전등 범위 안의 액터들을 감지하는 로직
+	//TArray<AActor*> OverlappingActors;
+
+	//// SpotLightComponent 범위와 겹치는 액터 찾기
+	//SphereComponent->GetOverlappingActors(OverlappingActors, AAlphabet::StaticClass());
+
+	//for (AActor* Actor : OverlappingActors)
+	//{
+	//	AAlphabet* alphabet = Cast<AAlphabet>(Actor);
+	//	if (!alphabet)
+	//	{
+	//		alphabet->HideText();
+	//	}
+	//}
 }

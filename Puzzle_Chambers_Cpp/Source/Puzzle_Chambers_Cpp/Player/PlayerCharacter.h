@@ -28,19 +28,22 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Light")
-	FTransform FlashlightAttachTransform;
-
 	UPROPERTY(EditAnywhere)
 	AFlashLight* FlashLight;
+
+	UPROPERTY(EditAnywhere)
+	class UCameraComponent* Camera;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* AttachPoint;
 
 	void AttachFlashLight();
 	void ToggleLight();
 
-protected:
-	UPROPERTY(EditAnywhere)
-	class UCameraComponent* Camera;
+	//물체 잡기 상태 확인
+	bool bIsGrabbingObject = false;
 
+protected:
 	void MoveForward(float InputValue);
 	void MoveRight(float InputValue);
 	void Turn(float InputValue);
@@ -49,17 +52,14 @@ protected:
 	float BaseTurnRate = 45.0f;
 	float BaseLookUpRate = 45.0f;
 
-	bool bCanGetLight;
-	bool bHasFlashLight;
-	bool bIsLightTurnOn;
+	bool bCanGetLight = false;
+	bool bHasFlashLight = false;
+	bool bIsLightTurnOn = false;
 
 private:
 	//Physics Handle 컴포넌트
 	UPROPERTY(VisibleAnywhere)
 	class UPhysicsHandleComponent* PhysicsHandle;
-
-	//물체 잡기 상태 확인
-	bool bIsGrabbingObject = false;
 
 	//물체 잡기 및 놓기 함수
 	void Grab();

@@ -30,10 +30,17 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Attach();
+	void Detach();
 	void TurnOn();
+	void TurnOff();
+	void ShowAlphabet();
+	void HideAlphabet();
 
-	bool bcanAttach;
-	bool bIsLightOn;
+	bool bcanAttach = false;
+	bool bIsAttached = false;
+	bool bIsLightOn = false;
+
+	FTransform OriginalTransform;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* Body;
@@ -41,9 +48,12 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	USphereComponent* TriggerSphere;
 
+	UPROPERTY(EditAnywhere)
+	USphereComponent* SphereComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Light")
 	USpotLightComponent* FlashLight_Light;
 
-	/*UPROPERTY(EditAnywhere)
-	APlayerCharacter* PlayerActor;*/
+	UPROPERTY(EditAnywhere)
+	APlayerCharacter* PlayerActor;
 };

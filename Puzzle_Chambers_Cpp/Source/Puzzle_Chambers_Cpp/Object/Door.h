@@ -21,6 +21,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	void CompareWeights();
+	
 
 public:	
 	// Called every frame
