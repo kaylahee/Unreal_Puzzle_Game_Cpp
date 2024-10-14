@@ -18,13 +18,13 @@ void ACube::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	bIsSnapped = false;
 }
 
 // Called every frame
 void ACube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ACube::Fix()

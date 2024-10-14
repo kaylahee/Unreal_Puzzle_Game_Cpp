@@ -34,4 +34,6 @@ public:
 	
 	void Fix();
 	void NotFix();
+
+	bool bIsSnapped;
 };

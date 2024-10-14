@@ -43,6 +43,7 @@ void AFlashLight::BeginPlay()
 	
 	PlayerActor = Cast<APlayerCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), APlayerCharacter::StaticClass()));
 	FlashLight_Light->SetVisibility(false);
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 // Called every frame
@@ -111,7 +112,7 @@ void AFlashLight::TurnOn()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOn")));
 	FlashLight_Light->SetVisibility(true);
 
-	//ShowAlphabet();
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }
 
 void AFlashLight::TurnOff()
@@ -119,33 +120,5 @@ void AFlashLight::TurnOff()
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOff")));
 	FlashLight_Light->SetVisibility(false);
 
-	//HideAlphabet();
-}
-
-//void AFlashLight::ShowAlphabet()
-//{
-//	AAlphabet* alphabet = Cast<AAlphabet>(Actor);
-//	if (alphabet)
-//	{
-//		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
-//		alphabet->ShowText();
-//	}
-//}
-
-void AFlashLight::HideAlphabet()
-{
-	//// 손전등 범위 안의 액터들을 감지하는 로직
-	//TArray<AActor*> OverlappingActors;
-
-	//// SpotLightComponent 범위와 겹치는 액터 찾기
-	//SphereComponent->GetOverlappingActors(OverlappingActors, AAlphabet::StaticClass());
-
-	//for (AActor* Actor : OverlappingActors)
-	//{
-	//	AAlphabet* alphabet = Cast<AAlphabet>(Actor);
-	//	if (!alphabet)
-	//	{
-	//		alphabet->HideText();
-	//	}
-	//}
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }

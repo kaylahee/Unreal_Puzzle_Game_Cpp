@@ -22,10 +22,6 @@ APlayerCharacter::APlayerCharacter()
 	AttachPoint = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Point"));
 	AttachPoint->SetupAttachment(Camera);
 
-	// AttachPoint의 로컬 위치를 설정 (예: 카메라의 바로 아래쪽에 위치하도록 조정)
-	//AttachPoint->SetRelativeLocation(FVector(0.0f, 0.0f, -50.0f)); // 카메라 아래쪽으로 50 유닛 이동
-	//AttachPoint->SetRelativeRotation(FRotator::ZeroRotator); // 회전 없이 기본 회전 유지
-
 	// Physics Handle 컴포넌트 초기화
 	PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandle"));
 }
@@ -37,8 +33,7 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	//Physics Handle이 존재하는지 확인
-	if (!PhysicsHandle)
-	{
+	if (!PhysicsHandle) {
 		UE_LOG(LogTemp, Error, TEXT("Physics Handle is missing on %s!"), *GetOwner()->GetName());
 	}
 
@@ -51,66 +46,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// 물체를 잡고 있다면, 물체의 위치를 업데이트
-	if (bIsGrabbingObject && PhysicsHandle && PhysicsHandle->GrabbedComponent)
-	{
+	if (bIsGrabbingObject && PhysicsHandle && PhysicsHandle->GrabbedComponent) {
 		UpdateGrabbedObjectLocation();
 	}
 
 	// 라인 트레이스를 사용하여 물체 감지
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
-	static TWeakObjectPtr<AActor> LastHitActor; // 마지막 감지된 액터를 저장하기 위한 변수
-
-	// 감지된 물체의 색상 변경
-	if (HitResult.GetActor())
-	{
-		UPrimitiveComponent* ComponentToHighlight = HitResult.GetComponent();
-
-		// 마지막으로 감지된 액터와 현재 감지된 액터가 다를 경우에만 색상 변경
-		if (LastHitActor != HitResult.GetActor())
-		{
-			// 이전 감지된 액터의 색상 복원
-			if (LastHitActor.IsValid())
-			{
-				UPrimitiveComponent* ComponentToRestore = LastHitActor->FindComponentByClass<UPrimitiveComponent>();
-				if (ComponentToRestore)
-				{
-					UMaterialInstanceDynamic* DynamicMaterial = ComponentToRestore->CreateAndSetMaterialInstanceDynamic(0);
-					if (DynamicMaterial)
-					{
-						DynamicMaterial->SetVectorParameterValue(TEXT("Color"), FLinearColor::White); // 원래 색상으로 복원
-					}
-				}
-			}
-
-			// 현재 감지된 액터의 색상 변경
-			UMaterialInstanceDynamic* DynamicMaterial = ComponentToHighlight->CreateAndSetMaterialInstanceDynamic(0);
-			if (DynamicMaterial)
-			{
-				// 색상을 빨간색으로 변경
-				DynamicMaterial->SetVectorParameterValue(TEXT("Color"), FLinearColor::Yellow);
-			}
-
-			// 마지막 감지된 액터 업데이트
-			LastHitActor = HitResult.GetActor();
-		}
-	}
-	else
-	{
-		// 라인 트레이스가 감지된 물체가 없을 때, 마지막 감지된 액터의 색상 복원
-		if (LastHitActor.IsValid())
-		{
-			UPrimitiveComponent* ComponentToRestore = LastHitActor->FindComponentByClass<UPrimitiveComponent>();
-			if (ComponentToRestore)
-			{
-				UMaterialInstanceDynamic* DynamicMaterial = ComponentToRestore->CreateAndSetMaterialInstanceDynamic(0);
-				if (DynamicMaterial)
-				{
-					DynamicMaterial->SetVectorParameterValue(TEXT("Color"), FLinearColor::White); // 원래 색상으로 복원
-				}
-			}
-			LastHitActor = nullptr; // 마지막 감지된 액터 초기화
-		}
-	}
 }
 
 
@@ -158,18 +99,18 @@ void APlayerCharacter::Grab()
 {
 	// 라인 트레이스를 사용하여 플레이어 앞의 물체를 감지
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("1 Hit"));
 
 	// 감지된 물체가 있다면
-	if (HitResult.GetActor())
-	{
+	if (HitResult.GetActor()) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("2 Actor"));
+
 		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
 
 		// 물체의 위치를 Physics Handle로 잡기
-		if (PhysicsHandle)
-		{
+		if (PhysicsHandle) {
 			// 물체가 이미 스냅된 경우, 물리 시뮬레이션을 활성화하여 다시 집기
-			if (ComponentToGrab->IsSimulatingPhysics())
-			{
+			if (ComponentToGrab->IsSimulatingPhysics()) {
 				// 물체를 잡기
 				PhysicsHandle->GrabComponentAtLocationWithRotation(
 					ComponentToGrab,
@@ -180,8 +121,8 @@ void APlayerCharacter::Grab()
 
 				bIsGrabbingObject = true;
 			}
-			else // 물체가 스냅된 상태라면
-			{
+			// 물체가 스냅된 상태라면
+			else {
 				// 스냅된 물체의 물리 시뮬레이션을 활성화
 				ComponentToGrab->SetSimulatePhysics(true);
 
@@ -202,15 +143,13 @@ void APlayerCharacter::Grab()
 void APlayerCharacter::Release()
 {
 	// Physics Handle로 잡은 물체를 놓기
-	if (bIsGrabbingObject && PhysicsHandle)
-	{
+	if (bIsGrabbingObject && PhysicsHandle) {
 		// 현재 잡고 있는 물체 가져오기
 		UPrimitiveComponent* GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
-
-		// 물체의 색상 복원 및 물리 시뮬레이션 비활성화
+	
 		if (GrabbedComponent)
 		{
-			GrabbedComponent->SetSimulatePhysics(false); // 물리 시뮬레이션 비활성화하여 고정
+			GrabbedComponent->SetSimulatePhysics(false);
 		}
 
 		PhysicsHandle->ReleaseComponent();

@@ -4,6 +4,7 @@
 #include "Puzzle_Chambers_Cpp/Object/GameManager.h"
 #include "Board.h"
 #include "Door.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AGameManager::AGameManager()
@@ -88,5 +89,7 @@ void AGameManager::CheckAllBoardsCnt3()
 	if (bAllCntAreOne) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Door destroy"));
 		D2->Destroy();
+
+		UGameplayStatics::OpenLevel(this, FName("GameSuccess"));
 	}
 }
