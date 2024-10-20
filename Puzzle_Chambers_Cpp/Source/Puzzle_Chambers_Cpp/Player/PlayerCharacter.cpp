@@ -99,11 +99,11 @@ void APlayerCharacter::Grab()
 {
 	// 라인 트레이스를 사용하여 플레이어 앞의 물체를 감지
 	FHitResult HitResult = GetFirstPhysicsBodyInReach();
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("1 Hit"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("1 Hit"));
 
 	// 감지된 물체가 있다면
 	if (HitResult.GetActor()) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("2 Actor"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("2 Actor"));
 
 		UPrimitiveComponent* ComponentToGrab = HitResult.GetComponent();
 
@@ -194,7 +194,7 @@ void APlayerCharacter::UpdateGrabbedObjectLocation()
 
 void APlayerCharacter::AttachFlashLight()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q pressed")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q pressed")));
 	if (bHasFlashLight) {
 		bHasFlashLight = false;
 	}
@@ -204,7 +204,7 @@ void APlayerCharacter::AttachFlashLight()
 
 	if (bHasFlashLight) {
 		if (FlashLight->bcanAttach) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q in")));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. Q in")));
 			FlashLight->Attach();
 		}
 	}
@@ -215,7 +215,7 @@ void APlayerCharacter::AttachFlashLight()
 
 void APlayerCharacter::ToggleLight()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. R pressed")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("1. R pressed")));
 	if (bIsLightTurnOn) {
 		bIsLightTurnOn = false;
 	}

@@ -46,6 +46,11 @@ void ABoard::BeginPlay()
 	{
 		GameManager->AllBoard3s.Add(this);
 	}
+
+	if (GameManager && IsStage4)
+	{
+		GameManager->AllBoard4s.Add(this);
+	}
 }
 
 // Called every frame
@@ -59,7 +64,7 @@ void ABoard::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (ACube* C = Cast<ACube>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Snap"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Snap"));
 		
 		C->SetActorLocation(Position->GetComponentLocation());
 		C->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
@@ -68,15 +73,15 @@ void ABoard::NotifyActorBeginOverlap(AActor* OtherActor)
 		FString CubeColor = C->C_color;
 		FString CubeShape = C->C_shape;
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), CompareProperties(CubeColor, CubeShape)));
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), cnt));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), CompareProperties(CubeColor, CubeShape)));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), cnt));
 
 		if (CompareProperties(CubeColor, CubeShape)) {
-			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Match"));
 			cnt = 1;
 			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%d"), cnt));
 
 			if (IsStage1) {
+				//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Match"));
 				GameManager->CheckAllBoardsCnt();
 			}
 			if (IsStage2) {
@@ -85,10 +90,13 @@ void ABoard::NotifyActorBeginOverlap(AActor* OtherActor)
 			if (IsStage3) {
 				GameManager->CheckAllBoardsCnt3();
 			}
+			if (IsStage4) {
+				GameManager->CheckAllBoardsCnt4();
+			}
 		}
 		else {
 			cnt = 0;
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Not Match"));
+			//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Cube Not Match"));
 		}
 	}
 }

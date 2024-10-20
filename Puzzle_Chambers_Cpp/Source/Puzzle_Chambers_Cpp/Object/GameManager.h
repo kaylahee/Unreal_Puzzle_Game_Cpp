@@ -18,17 +18,19 @@ public:
 	// Sets default values for this actor's properties
 	AGameManager();
 
-	UPROPERTY(EditAnywhere, Category = "Boards")
 	TArray<ABoard*> AllBoards;
 	TArray<ABoard*> AllBoard2s;
 	TArray<ABoard*> AllBoard3s;
+	TArray<ABoard*> AllBoard4s;
 
 	void CheckAllBoardsCnt();
 	void CheckAllBoardsCnt2();
 	void CheckAllBoardsCnt3();
+	void CheckAllBoardsCnt4();
+
 	ABoard* B;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Door")
 	ADoor* D1;
 	UPROPERTY(EditAnywhere)
 	ADoor* D2;
@@ -51,5 +53,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

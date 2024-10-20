@@ -46,6 +46,8 @@ public:
 	FString B_shape;
 
 	bool CompareProperties(FString CubeColor, FString CubeShape);
+
+	UPROPERTY(VisibleAnywhere)
 	int cnt;
 
 	AGameManager* GameManager;
@@ -56,4 +58,6 @@ public:
 	bool IsStage2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stage3")
 	bool IsStage3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stage4")
+	bool IsStage4;
 };

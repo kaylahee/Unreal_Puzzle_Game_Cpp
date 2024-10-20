@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/TextBlock.h"
 #include "Blueprint/UserWidget.h"
+#include "GameManager.h"
 #include "Timer.generated.h"
 
 UCLASS()
@@ -42,7 +43,4 @@ private:
 
 	// 타이머 종료 처리 함수
 	void OnTimerEnd();
-
-	// 게임 종료 씬으로 전환하는 함수
-	void EndGame();
 };

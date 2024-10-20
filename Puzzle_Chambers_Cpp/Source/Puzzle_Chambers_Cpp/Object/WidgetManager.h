@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MainMenuWidget.generated.h"
+#include "WidgetManager.generated.h"
 
 UCLASS()
-class PUZZLE_CHAMBERS_CPP_API UMainMenuWidget : public UUserWidget
+class PUZZLE_CHAMBERS_CPP_API UWidgetManager : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -21,10 +21,16 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* QuitButton;
 
+	UPROPERTY(meta = (BindWidget))
+	class UButton* ReturnButton;
+
 private:
 	UFUNCTION()
 	void OnPlayClicked();
 
 	UFUNCTION()
 	void OnQuitClicked();
+
+	UFUNCTION()
+	void OnReturnClicked();
 };

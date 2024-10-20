@@ -4,7 +4,6 @@
 #include "Puzzle_Chambers_Cpp/Object/Timer.h"
 #include "Components/TextRenderComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blueprint/UserWidget.h"
 
 // Sets default values
 ATimer::ATimer()
@@ -39,13 +38,11 @@ void ATimer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// 남은 시간이 0보다 큰 경우에만 타이머 업데이트
-	if (RemainingTime > 0.0f)
-	{
+	if (RemainingTime > 0.0f) {
 		RemainingTime -= DeltaTime; 
 		UpdateTimerUI();
 
-		if (RemainingTime <= 1.0f)
-		{
+		if (RemainingTime <= 1.0f) {
 			OnTimerEnd();
 		}
 	}
@@ -63,12 +60,6 @@ void ATimer::UpdateTimerUI()
 }
 
 void ATimer::OnTimerEnd()
-{
-	// 게임 종료 씬으로 전환
-	EndGame();
-}
-
-void ATimer::EndGame()
 {
 	UGameplayStatics::OpenLevel(this, FName("GameOver"));
 }

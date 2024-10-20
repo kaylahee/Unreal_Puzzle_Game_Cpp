@@ -5,20 +5,19 @@
 #include "Board.h"
 #include "Door.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 AGameManager::AGameManager()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void AGameManager::BeginPlay()
-{
+{	
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -42,7 +41,7 @@ void AGameManager::CheckAllBoardsCnt()
 
 	// 모든 보드의 cnt가 1이면 특정 동작 수행
 	if (bAllCntAreOne) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("All boards' cnt is 1!"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("All boards' cnt is 1!"));
 		ShowHiddenActors();
 	}
 }
@@ -68,8 +67,10 @@ void AGameManager::CheckAllBoardsCnt2()
 
 	// 모든 보드의 cnt가 1이면 특정 동작 수행
 	if (bAllCntAreOne) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Door destroy"));
-		D1->Destroy();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Door destroy"));
+		if (D1) {
+			D1->Destroy();
+		}
 	}
 }
 
@@ -87,9 +88,23 @@ void AGameManager::CheckAllBoardsCnt3()
 
 	// 모든 보드의 cnt가 1이면 특정 동작 수행
 	if (bAllCntAreOne) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Door destroy"));
-		D2->Destroy();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Door destroy"));
+		if (D2) {
+			D2->Destroy();
+		}
+	}
+}
 
+void AGameManager::CheckAllBoardsCnt4()
+{
+	bool bAllCntAreOne = true;
+
+	if (AllBoard4s[0]->cnt != 1) {
+		bAllCntAreOne = false;
+	}
+
+	// 모든 보드의 cnt가 1이면 특정 동작 수행
+	if (bAllCntAreOne) {
 		UGameplayStatics::OpenLevel(this, FName("GameSuccess"));
 	}
 }
