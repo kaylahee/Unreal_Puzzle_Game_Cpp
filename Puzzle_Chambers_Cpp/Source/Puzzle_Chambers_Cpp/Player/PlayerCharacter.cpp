@@ -143,20 +143,22 @@ void APlayerCharacter::Grab()
 void APlayerCharacter::Release()
 {
 	// Physics Handle로 잡은 물체를 놓기
-	if (bIsGrabbingObject && PhysicsHandle) {
+	if (bIsGrabbingObject && PhysicsHandle)
+	{
 		// 현재 잡고 있는 물체 가져오기
 		UPrimitiveComponent* GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
-	
+
 		if (GrabbedComponent)
 		{
-			GrabbedComponent->SetSimulatePhysics(false);
+			// 물리 시뮬레이션을 활성화한 상태로 놓기
+			GrabbedComponent->SetSimulatePhysics(true);
 		}
 
+		// 물체 놓기
 		PhysicsHandle->ReleaseComponent();
 		bIsGrabbingObject = false;
 	}
 }
-
 
 FHitResult APlayerCharacter::GetFirstPhysicsBodyInReach() const
 {

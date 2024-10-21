@@ -68,12 +68,12 @@ void AFlashLight::NotifyActorBeginOverlap(AActor* OtherActor)
 	if (APlayerCharacter* P = Cast<APlayerCharacter>(OtherActor))
 	{
 		bcanAttach = true;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player In"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player In"));
 	}
 
 	if (AAlphabet* alphabet = Cast<AAlphabet>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
 		alphabet->ShowText();
 	}
 }
@@ -84,32 +84,32 @@ void AFlashLight::NotifyActorEndOverlap(AActor* OtherActor)
 	if (APlayerCharacter* P = Cast<APlayerCharacter>(OtherActor))
 	{
 		bcanAttach = false;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player Out"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Player Out"));
 	}
 
 	if (AAlphabet* alphabet = Cast<AAlphabet>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("3. ShowAlphabet")));
 		alphabet->HideText();
 	}
 }
 
 void AFlashLight::Attach()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Attached")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Attached")));
 	bIsAttached = true;
 }
 
 void AFlashLight::Detach()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Detached")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. Detached")));
 	bIsAttached = false;
 	this->SetActorTransform(OriginalTransform);
 }
 
 void AFlashLight::TurnOn()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOn")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOn")));
 	FlashLight_Light->SetVisibility(true);
 
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
@@ -117,7 +117,7 @@ void AFlashLight::TurnOn()
 
 void AFlashLight::TurnOff()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOff")));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("2. TurnOff")));
 	FlashLight_Light->SetVisibility(false);
 
 	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);

@@ -39,6 +39,6 @@ void UWidgetManager::OnQuitClicked()
 
 void UWidgetManager::OnReturnClicked()
 {
-	UGameplayStatics::OpenLevel(this, FName("MainMap"));
+	UGameplayStatics::OpenLevel(this, FName("MainMenu"));
 }
 

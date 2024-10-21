@@ -29,6 +29,7 @@ void ACube::Tick(float DeltaTime)
 
 void ACube::Fix()
 {
+	bIsSnapped = true;
 	shape->SetSimulatePhysics(false);
 }
 

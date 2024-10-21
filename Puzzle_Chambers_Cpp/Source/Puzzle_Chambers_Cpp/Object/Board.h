@@ -60,4 +60,6 @@ public:
 	bool IsStage3;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stage4")
 	bool IsStage4;
+
+	bool isSnapped = false;
 };

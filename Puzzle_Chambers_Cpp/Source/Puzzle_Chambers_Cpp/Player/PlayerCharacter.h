@@ -7,6 +7,7 @@
 #include "PlayerCharacter.generated.h"
 
 class AFlashLight;
+class ABoard;
 
 UCLASS()
 class PUZZLE_CHAMBERS_CPP_API APlayerCharacter : public ACharacter
@@ -64,6 +65,7 @@ private:
 	//물체 잡기 및 놓기 함수
 	void Grab();
 	void Release();
+	void ToggleGrab();
 
 	//플레이어가 보는 방향으로 라인 트레이스하여 물체 감지
 	FHitResult GetFirstPhysicsBodyInReach() const;
